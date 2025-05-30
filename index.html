@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Escola Paranaense de Refrigeração</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("https://fluxoconsultoria.poli.ufrj.br/wp-content/uploads/2023/05/close-up-na-bomba-de-calor-fora-de-casa-1024x731.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      background-color: rgba(0, 51, 102, 0.85);
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 26px;
+      text-align: center;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    form input,
+    form select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #1e90ff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0055aa;
+    }
+
+    #resposta {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      form input,
+      form select,
+      button {
+        font-size: 14px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Escola Paranaense de Refrigeração</h1>
+
+    <form id="formulario">
+      <input type="text" name="NOME COMPLETO" placeholder="Nome completo" required />
+      <input type="tel" name="TELEFONE" placeholder="Telefone (99) 99999-9999" required />
+
+      <select name="CURSO" required>
+        <option value="" disabled selected>Escolha o curso</option>
+        <option>Curso Profissionalizante de Mecânico em Refrigeração e Ar Condicionado</option>
+      </select>
+
+      <select name="TURMA" required>
+        <option value="" disabled selected>Escolha a turma</option>
+        <option>01</option>
+        <option>02</option>
+        <option>03</option>
+        <option>04</option>
+        <option>05</option>
+        <option>06</option>
+        <option>07</option>
+        <option>08</option>
+        <option>09</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+        <option>13</option>
+        <option>14</option>
+        <option>15</option>
+        <option>16</option>
+        <option>17</option>
+        <option>18</option>
+        <option>19</option>
+        <option>20</option>
+        <option>21</option>
+        <option>22</option>
+        <option>23</option>
+        <option>24</option>
+        <option>25</option>
+        <option>26</option>
+        <option>27</option>
+        <option>28</option>
+        <option>29</option>
+        <option>30</option>
+      </select>
+
+      <input type="text" name="CPF" id="cpf" placeholder="CPF (000.000.000-00)" required />
+      <input type="text" name="ENDEREÇO" placeholder="Endereço" required />
+      <input type="text" name="ACORDO" placeholder="Acordo" required />
+      <button type="submit">Enviar</button>
+    </form>
+
+    <p id="resposta"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("formulario");
+    const resposta = document.getElementById("resposta");
+
+    function formatarCPF(cpf) {
+      return cpf.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+
+    function formatarTelefone(telefone) {
+      return telefone.replace(/\D/g, "").replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const cpfFormatado = formatarCPF(form["CPF"].value);
+      const telFormatado = formatarTelefone(form["TELEFONE"].value);
+
+      const dados = {
+        "NOME COMPLETO": form["NOME COMPLETO"].value,
+        "TELEFONE": telFormatado,
+        "CURSO": form["CURSO"].value,
+        "TURMA": form["TURMA"].value,
+        "CPF": cpfFormatado,
+        "ENDEREÇO": form["ENDEREÇO"].value,
+        "ACORDO": form["ACORDO"].value,
+      };
+
+      try {
+        const response = await fetch("https://api.sheetbest.com/sheets/a9573a38-3537-4c3a-9f2e-d506ff1c93ad", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dados),
+        });
+
+        if (response.ok) {
+          resposta.innerText = "📌 Cadastro realizado! A Escola Paranaense de Refrigeração agradece sua inscrição.";
+          form.reset();
+        } else {
+          resposta.innerText = "❌ Erro ao enviar. Tente novamente.";
+        }
+      } catch (error) {
+        resposta.innerText = "⚠️ Erro de conexão.";
+      }
+    });
+  </script>
+</body>
+</html>
